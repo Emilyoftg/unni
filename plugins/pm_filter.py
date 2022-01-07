@@ -61,7 +61,7 @@ async def next_page(bot, query):
         btn = [
             [
                 InlineKeyboardButton(
-                    text=f"[{get_size(file.file_size)}] {file.file_name}", callback_data=f'files#{file.file_id}'
+                    text=f"📁 [{get_size(file.file_size)}] {file.file_name}", callback_data=f'files#{file.file_id}'
                 ),
             ]
             for file in files
@@ -112,7 +112,7 @@ async def next_page(bot, query):
 async def advantage_spoll_choker(bot, query):
     _, user, movie_ = query.data.split('#')
     if int(user) != 0 and query.from_user.id != int(user):
-        return await query.answer("okDa", show_alert=True)
+        return await query.answer("കൊള്ളാലോ നീ 😄", show_alert=True)
     if movie_  == "close_spellcheck":
         return await query.message.delete()
     movies = SPELL_CHECK.get(query.message.reply_to_message.message_id)
@@ -577,7 +577,7 @@ async def auto_filter(client, msg, spoll=False):
         btn = [
             [
                 InlineKeyboardButton(
-                    text=f"[{get_size(file.file_size)}] {file.file_name}", callback_data=f'files#{file.file_id}'
+                    text=f"📁 [{get_size(file.file_size)}] {file.file_name}", callback_data=f'files#{file.file_id}'
                 ),
             ]
             for file in files
@@ -602,11 +602,17 @@ async def auto_filter(client, msg, spoll=False):
         BUTTONS[key] = search
         req = message.from_user.id if message.from_user else 0
         btn.append(
-            [InlineKeyboardButton(text=f"🗓 1/{round(int(total_results)/10)}",callback_data="pages"), InlineKeyboardButton(text="NEXT ⏩",callback_data=f"next_{req}_{key}_{offset}")]
+            [InlineKeyboardButton(text=f"🗓 1/{round(int(total_results)/10)} 🗓",callback_data="pages"), InlineKeyboardButton(text="NEXT ⏩",callback_data=f"next_{req}_{key}_{offset}")]
+        )
+        btn.insert(0,
+            [InlineKeyboardButton(text="⭕️ Join Our Channel ⭕️",url="https://t.me/MovieClubOfficiall")]
         )
     else:
         btn.append(
-            [InlineKeyboardButton(text="🗓 1/1",callback_data="pages")]
+            [InlineKeyboardButton(text="🗓 1/1 🗓",callback_data="pages")]
+        )
+        btn.insert(0,
+            [InlineKeyboardButton(text="⭕️ Join Our Channel ⭕️",url="https://t.me/MovieClubOfficiall")]
         )
     imdb = await get_poster(search, file=(files[0]).file_name) if IMDB else None
     if imdb:
@@ -642,7 +648,7 @@ async def auto_filter(client, msg, spoll=False):
             **locals()
         )
     else:
-        cap = f"Here is what i found for your query {search}"
+        cap = f"<b>🎬 Title : {search}\n🌟 8.7/10 | IMDb\n🎭 Genres: Document, Drama, Thriller\n👤 Requested By: {message.from_user.mention}\n\n© By {message.chat.title}</b>"
     if imdb and imdb.get('poster'):
         try:
             await message.reply_photo(photo=imdb.get('poster'), caption=cap, reply_markup=InlineKeyboardMarkup(btn))
@@ -652,9 +658,9 @@ async def auto_filter(client, msg, spoll=False):
             await message.reply_photo(photo=poster, caption=cap, reply_markup=InlineKeyboardMarkup(btn))
         except Exception as e:
             logger.exception(e)
-            await message.reply_text(cap, reply_markup=InlineKeyboardMarkup(btn))
+            await message.reply_photo(photo="https://telegra.ph/file/7ecd6795ad080b08c8bc6.jpg", caption=cap, reply_markup=InlineKeyboardMarkup(btn))
     else:
-        await message.reply_text(cap, reply_markup=InlineKeyboardMarkup(btn))
+        await message.reply_photo(photo="https://telegra.ph/file/7ecd6795ad080b08c8bc6.jpg", caption=cap, reply_markup=InlineKeyboardMarkup(btn))
     if spoll:
         await msg.message.delete()
         
